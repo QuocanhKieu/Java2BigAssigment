@@ -1,8 +1,11 @@
 package moviebookingapp.controllers.showtimeseat;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -42,7 +45,6 @@ public class ShowtimeseatController implements Initializable {
         System.out.println(currentStage);
         System.out.println(movie);
         try {
-            if (movie == null) throw new Exception("movie is empty");
 
             System.out.println(movie.getTittle());
             ShowTimeDAO showTimeDAO = new ShowTimeDAO();
@@ -56,15 +58,18 @@ public class ShowtimeseatController implements Initializable {
             content.getChildren().add(existingContent);
 
             for (ShowTime showtime : showtimeList) {
-                content.getChildren().add(createShowTimeGridPane(showtime));
+                GridPane gridpane = createShowTimeGridPane(showtime);
+;
+                gridpane.setOnMouseClicked(event-> {
+                    System.out.println("Pane clicked");
+                });
+
+                content.getChildren().add(gridpane);
+
             }
-
             System.out.println(showtimeList.size());
-//        System.out.println("get here");
-
             scrollPane.setContent(content);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -75,7 +80,7 @@ public class ShowtimeseatController implements Initializable {
 
     }
 
-    public Node createShowTimeGridPane(ShowTime showtime) {
+    public GridPane createShowTimeGridPane(ShowTime showtime) {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
