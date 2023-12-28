@@ -7,6 +7,16 @@ public class Seat {
     private int  seat_number;
     private int availability_status;
 
+    private boolean isSelected = false;
+
+    public boolean getiIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public Seat(int seat_id, int theater_id, int showtime_id, int seat_number, int availability_status) {
         this.seat_id = seat_id;
         this.theater_id = theater_id;
