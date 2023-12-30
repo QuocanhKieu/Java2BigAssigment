@@ -49,10 +49,10 @@ public class ShowTimeDAO implements DAOInterface<ShowTime>{
 
             System.out.println("movie_id is"+movie.getId() );
             ResultSet rs = ps.executeQuery();
-            int count = 0;
             while (rs.next()){
                 SeatDAO seatDAO = new SeatDAO();
                 ArrayList<Seat> seatList = seatDAO.list(rs.getInt("showtime_id"));
+                
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
                 ls.add(new ShowTime(

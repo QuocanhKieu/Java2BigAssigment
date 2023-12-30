@@ -13,23 +13,22 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import moviebookingapp.dao.SeatDAO;
 import moviebookingapp.dao.ShowTimeDAO;
 import moviebookingapp.entity.BookedReservation;
 import moviebookingapp.entity.Movie;
+import moviebookingapp.entity.Seat;
 import moviebookingapp.entity.ShowTime;
 import moviebookingapp.singleton.ReservationManager;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ShowtimeseatController implements Initializable {
-    int ADULT_PRICE = 115000;
-    int CHILD_PRICE = 100000;
+    private int ADULT_PRICE = 115000;
+    private int CHILD_PRICE = 100000;
 
     public Text staffName;
     public ScrollPane scrollPane;
@@ -49,6 +48,7 @@ public class ShowtimeseatController implements Initializable {
 
 //    HashSet<BookedReservation> bookedReservationList = new HashSet<>(); // chung cho tất cả showtime tìm đc
 //    List<GridPane> reservationGridPaneList = new ArrayList<>(); // chung cho tất cả showtime tìm đc
+// ko cho đc ra ngoài này
 
     public void setMovieInfo(Movie choosedMovie, Stage currentStage ) {
         movie = choosedMovie;
@@ -68,14 +68,25 @@ public class ShowtimeseatController implements Initializable {
             VBox content = new VBox();
             content.getChildren().add(existingContent);
 
-//            HashSet<BookedReservation> bookedReservationList = new HashSet<>(); // chung cho tất cả showtime tìm đc
-//            List<GridPane> reservationGridPaneList = new ArrayList<>(); // chung cho tất cả showtime tìm đc
-
+            // chô này cug đc nhưng cho ra hẳn ngoài
+            Set<Integer> button_clicked = new HashSet<>();
 
             for (ShowTime showtime : showtimeList) {
                 GridPane gridpane = createShowTimeGridPane(showtime);
-;
+;               gridpane.setId(showtime.getShowtime_id()+"");
                 gridpane.setOnMouseClicked(event-> {
+
+                    //re render the reservation side when get back to the scene
+                    ReservationManager reMa_1 = ReservationManager.getInstance();
+                    VBox re_content_1= new VBox();
+                    re_content_1.getChildren().addAll(reMa_1.getReservationGridPaneList());
+                    bookedReservationPane.setContent(re_content_1);
+
+
+                    
+                    List<Seat> seat_list = new SeatDAO().list(showtime.getShowtime_id());
+                    System.out.println(seat_list.size());
+
                     gridPaneFSeat.getChildren().clear();
                     gridPaneFSeat.setGridLinesVisible(true);
                     char[] alphabet = "ABCDE".toCharArray(); // A, B, C, D, E
@@ -85,107 +96,68 @@ public class ShowtimeseatController implements Initializable {
                         int count = 0;
                         for (int row = 0; row < 5; row++) {
                             for (int col = 0; col < 10; col++) {
-
-
+                                Seat curent_seat = seat_list.get(count);
 
                                 Button button = new Button(alphabet[row]+ "" + (col + 1));
                                 button.setStyle("-fx-background-color:  #D9D9D9;");
 
-                                button.setId(showtime.getSeatlist().get(count).getSeat_id()+"");//setId for each Btn = each seat Id
+                                button.setId(curent_seat.getSeat_id()+"");//setId for each Btn = each seat Id
 
-                                if(showtime.getSeatlist().get(count).getAvailability_status() == 0) {
+                                if(curent_seat.getAvailability_status() == 0) {
                                     button.setStyle("-fx-background-color:  #D73F0F;");
                                     button.setDisable(true);
                                 }
-                                if(showtime.getSeatlist().get(count).getAvailability_status() == 1) {
+
+                                if(curent_seat.getAvailability_status() == 1) {
                                     button.setStyle("-fx-background-color:  #D9D9D9;");
                                     button.setDisable(false);
-//                                    EventHandler<ActionEvent> buttonHandler = new EventHandler<>() {
-//                                        @Override
-//                                        public void handle(ActionEvent event) {
-////                                        "như nhau"
-//                                        }
-//                                    };
-//
-//                                    EventHandler<ActionEvent> buttonHandler1 = (e)->{
-////                                        "như nhau"
-////                                        "áp dụng khi interface chỉ có 1 method -> tạo Object từ interface via lamda Ex"
-//                                    };
-                                    int[] clickCount = {0};
-
-//                                    if(showtime.getSeatlist().get(Integer.parseInt(button.getId())).getiIsSelected())
-//                                    {
-//                                        button.setStyle("-fx-background-color:  #00b5ef;"); // blue
-//                                        clickCount[0]++;
-//                                    }
-
-                                    button.setOnAction((e) -> {
-
-                                        clickCount[0]++;
-                                        if (clickCount[0] % 2 == 1) {
-
-                                            System.out.println("enter 109");
-
-                                            button.setStyle("-fx-background-color:  #00b5ef;"); // blue
-                                            BookedReservation re = new BookedReservation(
-                                                    movie.getId(),
-                                                    movie.getTittle(),
-                                                    Integer.parseInt(button.getId()),
-                                                    button.getText(),
-                                                    adultRadio.isSelected()?adultRadio.getText():childRadio.getText(),
-                                                    adultRadio.isSelected()?ADULT_PRICE:CHILD_PRICE,
-                                                    "Cinema" + showtime.getTheater_id(),
-                                                    LocalDate.now()
-                                            );
-
-                                            ReservationManager reMa = ReservationManager.getInstance();
-                                            reMa.addBookedReservation(re);
-
-                                            GridPane aGridpane = createReGridPane(re);
-                                            aGridpane.setId(button.getId());
-                                            reMa.addGridPane(aGridpane);
-
-                                            VBox reContent= new VBox();
-
-                                            reContent.getChildren().addAll(reMa.getReservationGridPaneList());
-                                            bookedReservationPane.setContent(reContent);
-
-                                            showtime.getSeatlist().get(Integer.parseInt(button.getId())).setIsSelected(true);
-
-                                        } else {
-                                            clickCount[0] = 0;
-                                            button.setStyle("-fx-background-color:  #D9D9D9;"); // grey
-                                            showtime.getSeatlist().get(Integer.parseInt(button.getId())).setIsSelected(false);
-                                            ReservationManager reMa = ReservationManager.getInstance();
-                                            reMa.removeBookedReservation(reMa.getBookedReservationList().get(Integer.parseInt(button.getId())));
-                                            reMa.removeGridPane(reMa.getReservationGridPaneList().get(Integer.parseInt(button.getId())));
-
-
-                                            VBox reContent= new VBox();
-
-                                            reContent.getChildren().addAll(reMa.getReservationGridPaneList());
-                                            bookedReservationPane.setContent(reContent);
-
-
-                                        }
-                                    });
-
-
                                 }
 
+                                if(curent_seat.getAvailability_status() == 2) {
+                                    button.setStyle("-fx-background-color:  #00b5ef;");
+                                    button.setDisable(false);
+                                }
 
+                                button.setOnAction((e) -> {
+                                    button_clicked.add(Integer.parseInt(button.getId()));
 
-                                count++;
+                                    if(curent_seat.getAvailability_status() == 1) {
+                                        button.setStyle("-fx-background-color:  #00b5ef;");
+                                        curent_seat.setAvailability_status(2);
+                                        new SeatDAO().update(curent_seat);
+
+                                        addBookedAndPane(button, showtime);
+
+                                        ReservationManager reMa = ReservationManager.getInstance();
+                                        VBox re_content= new VBox();
+                                        re_content.getChildren().addAll(reMa.getReservationGridPaneList());
+                                        bookedReservationPane.setContent(re_content);
+
+                                    }
+
+                                    else if(curent_seat.getAvailability_status() == 2) { // dùng else if để nó chỉ chạy 1 block thay vì cả 2 dấn tới ko có j thay đổi
+                                        button.setStyle("-fx-background-color:  #D9D9D9;");
+                                        curent_seat.setAvailability_status(1);
+                                        new SeatDAO().update(curent_seat);
+
+                                        removeBookedAndPane(button);
+
+                                        ReservationManager reMa = ReservationManager.getInstance();
+                                        VBox re_content= new VBox();
+                                        re_content.getChildren().addAll(reMa.getReservationGridPaneList());
+                                        bookedReservationPane.setContent(re_content);
+                                    }
+                                });
                                 button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Button takes full cell size
                                 button.setAlignment(Pos.CENTER);
                                 button.setTextAlignment(TextAlignment.CENTER);
-                                // You can set properties to the button if needed
-
 
                                 gridPaneFSeat.setRowIndex(button, row);
                                 gridPaneFSeat.setColumnIndex(button, col);
                                 gridPaneFSeat.getChildren().add(button);
+
                                 System.out.println(button.getId());
+                                count++;
                             }
 
                         }
@@ -311,5 +283,37 @@ public class ShowtimeseatController implements Initializable {
     public void gotoPayment(ActionEvent actionEvent) {
     }
 
+    public void removeBookedAndPane(Button button) {
+        int button_id = Integer.parseInt(button.getId());
+        ReservationManager reMa = ReservationManager.getInstance();
+        reMa.removeGridPane(reMa.getReservationGridPaneList().stream().filter((item) -> {
+            if(item.getId().equals(button_id+"")) return true;
+            else return false;
+        } ).findFirst().orElseThrow(() -> new IllegalStateException("GridPane not present")));//lấy gridPane ra khỏi Optional<GridPane> list
 
+        reMa.removeBookedReservation(reMa.getBookedReservationList().stream().filter((item)->{
+            if (item.getSeat_id() == button_id) return true;
+            else return false;
+        }).findFirst().orElseThrow(() -> new IllegalStateException("BookedReservation not present")));;//lấy BookedReservation ra khỏi Optional<BookedReservation> list
+    }
+
+    public void addBookedAndPane(Button button, ShowTime showtime) {
+
+        ReservationManager reMa = ReservationManager.getInstance();
+        BookedReservation re = new BookedReservation(
+                movie.getId(),
+                movie.getTittle(),
+                Integer.parseInt(button.getId()),
+                button.getText(),
+                adultRadio.isSelected()?adultRadio.getText():childRadio.getText(),
+                adultRadio.isSelected()?ADULT_PRICE:CHILD_PRICE,
+                "Cinema" + showtime.getTheater_id(),
+                LocalDate.now()
+        );
+        reMa.addBookedReservation(re);
+
+        GridPane aGridpane = createReGridPane(re);
+        aGridpane.setId(button.getId());
+        reMa.addGridPane(aGridpane);
+    }
 }

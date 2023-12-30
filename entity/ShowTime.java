@@ -100,18 +100,13 @@ public class ShowTime {
 
 
     public int getTotalSeatQty() {
-        int validSeatCout = 0;
-        for(Seat seat: seatlist) {
-            if(1 == seat.getAvailability_status())
-                validSeatCout++;
-        }
-        return validSeatCout;
+        return seatlist.size();
     }
     public int getValidSeatQty() {
         int validSeatCout = 0;
         for(Seat seat: seatlist) {
 
-            if(1 == seat.getAvailability_status()) {
+            if(seat.getAvailability_status() != 0) {
                 validSeatCout++;
             }
         }
