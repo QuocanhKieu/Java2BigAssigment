@@ -156,14 +156,19 @@
                <children>
                   <Label layoutX="6.0" layoutY="7.0" prefHeight="48.0" prefWidth="60.0" text="Total:" textAlignment="CENTER">
                      <font>
-                        <Font name="System Bold" size="20.0" />
+                        <Font name="System Bold" size="21.0" />
                      </font>
                   </Label>
-                  <Text fx:id="totalPrice" layoutX="66.0" layoutY="39.0" stroke="#424242" strokeType="OUTSIDE" style="-fx-stroke-width: 5px;" wrappingWidth="184.5673828125">
+                  <Text fx:id="totalPrice" fontSmoothingType="LCD" layoutX="78.0" layoutY="39.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-stroke-width: 5px;" text="0" wrappingWidth="184.5673828125">
                      <font>
-                        <Font size="20.0" />
+                        <Font name="System Bold Italic" size="20.0" />
                      </font>
                   </Text>
+                  <Label layoutX="245.0" layoutY="15.0" text="VND">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
             <ScrollPane fx:id="bookedReservationPane" layoutX="1148.0" layoutY="120.0" prefHeight="525.0" prefWidth="306.0">

@@ -1,7 +1,6 @@
 package moviebookingapp.controllers.showtimeseat;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -13,9 +12,10 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import moviebookingapp.dao.BookingReservationDAO;
 import moviebookingapp.dao.SeatDAO;
 import moviebookingapp.dao.ShowTimeDAO;
-import moviebookingapp.entity.BookedReservation;
+import moviebookingapp.entity.BookingReservation;
 import moviebookingapp.entity.Movie;
 import moviebookingapp.entity.Seat;
 import moviebookingapp.entity.ShowTime;
@@ -27,8 +27,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ShowtimeseatController implements Initializable {
-    private int ADULT_PRICE = 115000;
-    private int CHILD_PRICE = 100000;
+
+    private final int ADULT_PRICE = 115000;
+    private final int CHILD_PRICE = 100000;
+    private int total_price = 0;
+    public Text totalPrice;
 
     public Text staffName;
     public ScrollPane scrollPane;
@@ -51,39 +54,46 @@ public class ShowtimeseatController implements Initializable {
 // ko cho đc ra ngoài này
 
     public void setMovieInfo(Movie choosedMovie, Stage currentStage ) {
+        
         movie = choosedMovie;
         this.currentStage = currentStage;
 
-        System.out.println(currentStage);
-        System.out.println(movie);
+        totalPrice.setText("0");
         try {
             System.out.println(movie.getTittle());
-            ShowTimeDAO showTimeDAO = new ShowTimeDAO();
-
-            ArrayList<ShowTime> showtimeList = showTimeDAO.list(movie);
-
-            ArrayList<Node> show_time_gridPane = new ArrayList<>();
-            Node existingContent = scrollPane.getContent();
-            System.out.println(existingContent.toString());
-            VBox content = new VBox();
-            content.getChildren().add(existingContent);
+            ArrayList<ShowTime> showtimeList = new ShowTimeDAO().list(movie);
+//            ArrayList<Node> show_time_gridPane = new ArrayList<>();
+//            Node existingContent = scrollPane.getContent();
+//            System.out.println(existingContent.toString());
+//            content.getChildren().add(existingContent);
 
             // chô này cug đc nhưng cho ra hẳn ngoài
-            Set<Integer> button_clicked = new HashSet<>();
+//            Set<Integer> button_clicked = new HashSet<>()
+// Tạo lại dữ liệu cho ReservationManager
 
+
+//re-render the reservation side when get back to the scene
+            List<GridPane> reservationGridPaneList = new ArrayList<>();
+            List<BookingReservation> bookingReservationList = new BookingReservationDAO().list();
+            for(BookingReservation item : bookingReservationList) {
+                total_price+=item.getTicket_price();
+                GridPane grid_pane = createReGridPane(item);
+                grid_pane.setId(item.getSeat_id()+"");
+                reservationGridPaneList.add(grid_pane);
+            }
+            totalPrice.setText(total_price+"");
+
+
+            VBox re_content_1= new VBox();
+            re_content_1.getChildren().addAll(reservationGridPaneList);
+            bookedReservationPane.setContent(re_content_1);
+//re-render the reservation side when get back to the scene
+            VBox content = new VBox(); // for left side - showtime
             for (ShowTime showtime : showtimeList) {
                 GridPane gridpane = createShowTimeGridPane(showtime);
 ;               gridpane.setId(showtime.getShowtime_id()+"");
                 gridpane.setOnMouseClicked(event-> {
 
-                    //re render the reservation side when get back to the scene
-                    ReservationManager reMa_1 = ReservationManager.getInstance();
-                    VBox re_content_1= new VBox();
-                    re_content_1.getChildren().addAll(reMa_1.getReservationGridPaneList());
-                    bookedReservationPane.setContent(re_content_1);
-
-
-                    
                     List<Seat> seat_list = new SeatDAO().list(showtime.getShowtime_id());
                     System.out.println(seat_list.size());
 
@@ -116,22 +126,26 @@ public class ShowtimeseatController implements Initializable {
                                 if(curent_seat.getAvailability_status() == 2) {
                                     button.setStyle("-fx-background-color:  #00b5ef;");
                                     button.setDisable(false);
+
                                 }
 
                                 button.setOnAction((e) -> {
-                                    button_clicked.add(Integer.parseInt(button.getId()));
+
+//                                    button_clicked.add(Integer.parseInt(button.getId()));
 
                                     if(curent_seat.getAvailability_status() == 1) {
                                         button.setStyle("-fx-background-color:  #00b5ef;");
                                         curent_seat.setAvailability_status(2);
                                         new SeatDAO().update(curent_seat);
 
-                                        addBookedAndPane(button, showtime);
+                                        addBookingAndPane(curent_seat, showtime, reservationGridPaneList);
 
-                                        ReservationManager reMa = ReservationManager.getInstance();
-                                        VBox re_content= new VBox();
-                                        re_content.getChildren().addAll(reMa.getReservationGridPaneList());
-                                        bookedReservationPane.setContent(re_content);
+                                        if(adultRadio.isSelected()) {
+                                            total_price += ADULT_PRICE;
+                                        }else {
+                                            total_price += CHILD_PRICE;
+                                        }
+                                        totalPrice.setText(total_price+"");
 
                                     }
 
@@ -140,12 +154,12 @@ public class ShowtimeseatController implements Initializable {
                                         curent_seat.setAvailability_status(1);
                                         new SeatDAO().update(curent_seat);
 
-                                        removeBookedAndPane(button);
+                                        int booking_amount = new BookingReservationDAO().findOne(curent_seat.getSeat_id()).getTicket_price();
+                                            total_price -= booking_amount;
+                                        totalPrice.setText(total_price+"");
 
-                                        ReservationManager reMa = ReservationManager.getInstance();
-                                        VBox re_content= new VBox();
-                                        re_content.getChildren().addAll(reMa.getReservationGridPaneList());
-                                        bookedReservationPane.setContent(re_content);
+                                        removeBookingAndPane(curent_seat, reservationGridPaneList);
+
                                     }
                                 });
                                 button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); // Button takes full cell size
@@ -165,7 +179,9 @@ public class ShowtimeseatController implements Initializable {
                         System.out.println(count);
                     }
                 });
-
+                gridpane.setStyle("-fx-border-color: black; " +
+                        "-fx-border-width: 0px 0px 2px 0px; " +
+                        "-fx-padding: 10px 0;"); // 10px top and bottom padding
                 content.getChildren().add(gridpane);
 
             }
@@ -220,7 +236,7 @@ public class ShowtimeseatController implements Initializable {
         }
         return gridPane;
     }
-    public GridPane createReGridPane(BookedReservation re) {
+    public GridPane createReGridPane(BookingReservation re) {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -247,7 +263,7 @@ public class ShowtimeseatController implements Initializable {
                     label.setText(re.getAge_type());
                 }
                 if(col == 1 && row == 1){
-                    label.setText(re.getTicket_price()+"");
+                    label.setText(re.getTicket_price()+" VND");
                 }
                 GridPane.setRowIndex(label, row);
                 GridPane.setColumnIndex(label, col);
@@ -283,37 +299,58 @@ public class ShowtimeseatController implements Initializable {
     public void gotoPayment(ActionEvent actionEvent) {
     }
 
-    public void removeBookedAndPane(Button button) {
-        int button_id = Integer.parseInt(button.getId());
-        ReservationManager reMa = ReservationManager.getInstance();
-        reMa.removeGridPane(reMa.getReservationGridPaneList().stream().filter((item) -> {
-            if(item.getId().equals(button_id+"")) return true;
-            else return false;
-        } ).findFirst().orElseThrow(() -> new IllegalStateException("GridPane not present")));//lấy gridPane ra khỏi Optional<GridPane> list
+    public void removeBookingAndPane(Seat seat, List<GridPane> list) {
+        int seat_id = seat.getSeat_id();
+        new BookingReservationDAO().delete((seat_id));
 
-        reMa.removeBookedReservation(reMa.getBookedReservationList().stream().filter((item)->{
-            if (item.getSeat_id() == button_id) return true;
-            else return false;
-        }).findFirst().orElseThrow(() -> new IllegalStateException("BookedReservation not present")));;//lấy BookedReservation ra khỏi Optional<BookedReservation> list
+        try {
+            list.remove(list.stream().filter((item) -> {
+                if(item.getId().equals(seat_id+"")) return true;
+                else return false;
+            } ).findFirst().orElseThrow(() -> new IllegalStateException("GridPane not present")));//lấy gridPane ra khỏi Optional<GridPane> list
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        VBox booking_content= new VBox();
+        booking_content.getChildren().addAll(list);
+        bookedReservationPane.setContent(booking_content);
     }
 
-    public void addBookedAndPane(Button button, ShowTime showtime) {
-
-        ReservationManager reMa = ReservationManager.getInstance();
-        BookedReservation re = new BookedReservation(
+    public void addBookingAndPane(Seat seat, ShowTime showtime, List<GridPane> list) {
+        BookingReservation re = new BookingReservation(
                 movie.getId(),
                 movie.getTittle(),
-                Integer.parseInt(button.getId()),
-                button.getText(),
+                seat.getSeat_id(),
+                seat.getSeat_name(),
                 adultRadio.isSelected()?adultRadio.getText():childRadio.getText(),
                 adultRadio.isSelected()?ADULT_PRICE:CHILD_PRICE,
-                "Cinema" + showtime.getTheater_id(),
+                showtime.getTheater_id(),
+                showtime.getShowtime_id(),
                 LocalDate.now()
         );
-        reMa.addBookedReservation(re);
+        new BookingReservationDAO().create(re);// add booking to the db table
 
-        GridPane aGridpane = createReGridPane(re);
-        aGridpane.setId(button.getId());
-        reMa.addGridPane(aGridpane);
+        GridPane grid_pane = createReGridPane(re);
+        grid_pane.setId(seat.getSeat_id() + "");// quan trong để remove
+        grid_pane.setStyle("-fx-border-color: black; " +
+                "-fx-border-width: 0px 0px 2px 0px; " +
+                "-fx-padding: 10px 0;"); // 10px top and bottom padding
+
+        int isExist = 0;
+        for(GridPane item: list) {
+            if(item.getId().equals(grid_pane.getId())) {
+                isExist = 1;
+                break;
+            }
+        }
+        if(isExist == 0) list.add(grid_pane);
+
+        VBox booking_content= new VBox();
+        booking_content.getChildren().addAll(list);
+        bookedReservationPane.setContent(booking_content);
     }
+
 }
