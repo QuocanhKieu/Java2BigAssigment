@@ -1,0 +1,7 @@
+.login-btn{
+    -fx-background-color: #2d3648;
+}
+
+.login-btn:hover{
+    -fx-background-color: #46597c;
+}

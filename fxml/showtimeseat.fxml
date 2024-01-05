@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="823.0" prefWidth="1327.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moviebookingapp.controllers.showtimeseat.ShowtimeseatController">
+   <children>
+      <Pane fx:id="rootPane" layoutX="-171.0" layoutY="11.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+         <children>
+            <Pane layoutX="533.0" layoutY="121.0" prefHeight="592.0" prefWidth="615.0" style="-fx-border-color: grey;">
+               <children>
+                  <Pane layoutX="31.0" layoutY="22.0" prefHeight="20.0" prefWidth="554.0" style="-fx-background-color: #333;">
+                     <children>
+                        <Text fill="WHITE" layoutX="231.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MONITOR">
+                           <font>
+                              <Font name="System Bold" size="19.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <effect>
+                        <Reflection fraction="0.68" topOpacity="0.27" />
+                     </effect>
+                  </Pane>
+                  <Pane layoutX="200.0" layoutY="16.0" prefHeight="6.0" prefWidth="200.0" style="-fx-background-color: #333;" />
+                  <Pane layoutX="276.0" layoutY="542.0" prefHeight="20.0" prefWidth="21.0" style="-fx-background-color: #ff8282;" />
+                  <Pane layoutX="404.0" layoutY="542.0" prefHeight="20.0" prefWidth="21.0" style="-fx-background-color: #D9D9D9;" />
+                  <Text layoutX="298.0" layoutY="557.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Reserved">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="425.0" layoutY="557.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Available">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <GridPane fx:id="gridPaneFSeat" layoutX="10.0" layoutY="101.0" prefHeight="316.0" prefWidth="596.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+                  <Text layoutX="158.0" layoutY="557.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Choosing">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Pane layoutX="136.0" layoutY="542.0" prefHeight="20.0" prefWidth="21.0" style="-fx-background-color: #00b5ef;" />
+                  <Line endX="520.0" layoutX="102.0" layoutY="524.0" startX="-100.0" />
+               </children>
+            </Pane>
+            <Pane layoutX="222.0" layoutY="59.0" prefHeight="654.0" prefWidth="311.0" style="-fx-border-color: grey;">
+               <children>
+                  <ScrollPane fx:id="scrollPane" layoutX="-6.0" prefHeight="654.0" prefWidth="317.0" style="-fx-border-color: grey;">
+                     <content>
+                        <AnchorPane prefHeight="60.0" prefWidth="319.0" style="-fx-border-color: grey;">
+                           <children>
+                              <Label layoutX="63.0" layoutY="7.0" prefHeight="48.0" prefWidth="193.0" text="Schedule &amp; Theater" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </Pane>
+            <Pane layoutX="533.0" layoutY="59.0" prefHeight="62.0" prefWidth="615.0" style="-fx-border-color: grey;">
+               <children>
+                  <RadioButton fx:id="childRadio" layoutX="320.0" layoutY="21.0" mnemonicParsing="false" text="Children">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="userType" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="adultRadio" layoutX="194.0" layoutY="21.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="92.0" selected="true" text="Adult" toggleGroup="$userType" />
+               </children>
+            </Pane>
+            <Pane layoutX="215.0" layoutY="738.0" prefHeight="109.0" prefWidth="1240.0" style="-fx-border-color: grey;">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <Button fx:id="paymentBtn" layoutX="1011.0" layoutY="34.0" mnemonicParsing="false" onAction="#gotoPayment" style="-fx-background-color: #2D3648;" text="Payment &gt;" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="19.0" />
+                     </font>
+                     <effect>
+                        <DropShadow color="#686565" />
+                     </effect>
+                  </Button>
+               </children>
+            </Pane>
+            <Hyperlink fx:id="backBtn" layoutX="215.0" layoutY="14.0" onAction="#backToMovieList" style="-fx-background-color: rgba(0,0,0,.7);" text="&lt;  Back To List" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="19.0" />
+               </font>
+            </Hyperlink>
+            <ToggleButton fx:id="lightMode" layoutX="1278.0" layoutY="19.0" mnemonicParsing="false" onAction="#setLightMode" style="-fx-background-color: #D9D9D9;" text="☀">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ToggleButton>
+            <ToggleButton fx:id="darkMode" layoutX="1243.0" layoutY="19.0" mnemonicParsing="false" onAction="#setDarkMode" prefHeight="31.0" prefWidth="35.0" style="-fx-background-color: #D9D9D9;" text="🌙">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ToggleButton>
+            <Button fx:id="logOutBtn" layoutX="1358.0" layoutY="12.0" mnemonicParsing="false" text="LogOut">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Button>
+            <AnchorPane layoutX="1148.0" layoutY="59.0" prefHeight="62.0" prefWidth="306.0" style="-fx-border-color: grey;">
+               <children>
+                  <Label layoutX="6.0" layoutY="7.0" prefHeight="48.0" prefWidth="60.0" text="Staff :" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Text fx:id="staffName" layoutX="66.0" layoutY="39.0" stroke="#424242" strokeType="OUTSIDE" style="-fx-stroke-width: 5px;" wrappingWidth="184.5673828125">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="1148.0" layoutY="645.0" prefHeight="68.0" prefWidth="306.0" style="-fx-border-color: grey;">
+               <children>
+                  <Label layoutX="6.0" layoutY="7.0" prefHeight="48.0" prefWidth="60.0" text="Total:" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <Text fx:id="totalPrice" fontSmoothingType="LCD" layoutX="78.0" layoutY="39.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-stroke-width: 5px;" text="0" wrappingWidth="184.5673828125">
+                     <font>
+                        <Font name="System Bold Italic" size="20.0" />
+                     </font>
+                  </Text>
+                  <Label layoutX="245.0" layoutY="15.0" text="VND">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <ScrollPane fx:id="bookedReservationPane" layoutX="1148.0" layoutY="120.0" prefHeight="525.0" prefWidth="306.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+              </content>
+            </ScrollPane>
+      <!--    <Button fx:id="seatButton" layoutX="8.0" layoutY="8.0" minHeight="50" minWidth="50" text="Seat">-->
+      <!--        <font>-->
+      <!--            <Font size="12.0" />-->
+      <!--        </font>-->
+      <!--    </Button>-->
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

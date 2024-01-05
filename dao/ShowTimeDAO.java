@@ -47,7 +47,6 @@ public class ShowTimeDAO implements DAOInterface<ShowTime>{
             PreparedStatement ps = conn.getConn().prepareStatement(sql);
             ps.setInt(1, movie.getId()); // Assuming movie.getId() retrieves the movie's ID
 
-            System.out.println("movie_id is"+movie.getId() );
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 SeatDAO seatDAO = new SeatDAO();

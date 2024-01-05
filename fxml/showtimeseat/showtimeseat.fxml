@@ -34,7 +34,7 @@
                      </effect>
                   </Pane>
                   <Pane layoutX="200.0" layoutY="16.0" prefHeight="6.0" prefWidth="200.0" style="-fx-background-color: #333;" />
-                  <Pane layoutX="276.0" layoutY="542.0" prefHeight="20.0" prefWidth="21.0" style="-fx-background-color: #D73F0F;" />
+                  <Pane layoutX="276.0" layoutY="542.0" prefHeight="20.0" prefWidth="21.0" style="-fx-background-color: #ff8282;" />
                   <Pane layoutX="404.0" layoutY="542.0" prefHeight="20.0" prefWidth="21.0" style="-fx-background-color: #D9D9D9;" />
                   <Text layoutX="298.0" layoutY="557.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Reserved">
                      <font>
@@ -46,7 +46,7 @@
                         <Font size="14.0" />
                      </font>
                   </Text>
-                  <GridPane fx:id="gridPaneFSeat" layoutX="12.0" layoutY="99.0" prefHeight="316.0" prefWidth="596.0">
+                  <GridPane fx:id="gridPaneFSeat" layoutX="10.0" layoutY="101.0" prefHeight="316.0" prefWidth="596.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -118,7 +118,7 @@
                   </Button>
                </children>
             </Pane>
-            <Hyperlink fx:id="backBtn" layoutX="215.0" layoutY="14.0" onAction="#backToMovieList" style="-fx-background-color: rgba(0,0,0,.7);" text="&lt;  Back" textFill="WHITE">
+            <Hyperlink fx:id="backBtn" layoutX="215.0" layoutY="14.0" onAction="#backToMovieList" style="-fx-background-color: rgba(0,0,0,.7);" text="&lt;  Back To List" textFill="WHITE">
                <font>
                   <Font name="System Bold Italic" size="19.0" />
                </font>

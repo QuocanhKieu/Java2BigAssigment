@@ -13,14 +13,21 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import moviebookingapp.dao.BookingReservationDAO;
+import moviebookingapp.dao.InputStreamDAO;
 import moviebookingapp.dao.SeatDAO;
 import moviebookingapp.dao.ShowTimeDAO;
+import moviebookingapp.database.Connector;
 import moviebookingapp.entity.BookingReservation;
 import moviebookingapp.entity.Movie;
 import moviebookingapp.entity.Seat;
 import moviebookingapp.entity.ShowTime;
+import moviebookingapp.report.Report;
 import moviebookingapp.singleton.ReservationManager;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.Writer;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +56,8 @@ public class ShowtimeseatController implements Initializable {
     private Movie movie;
     private Stage currentStage;
 
+    private Map map;
+
 //    HashSet<BookedReservation> bookedReservationList = new HashSet<>(); // chung cho tất cả showtime tìm đc
 //    List<GridPane> reservationGridPaneList = new ArrayList<>(); // chung cho tất cả showtime tìm đc
 // ko cho đc ra ngoài này
@@ -58,9 +67,9 @@ public class ShowtimeseatController implements Initializable {
         movie = choosedMovie;
         this.currentStage = currentStage;
 
+
         totalPrice.setText("0");
         try {
-            System.out.println(movie.getTittle());
             ArrayList<ShowTime> showtimeList = new ShowTimeDAO().list(movie);
 //            ArrayList<Node> show_time_gridPane = new ArrayList<>();
 //            Node existingContent = scrollPane.getContent();
@@ -95,7 +104,7 @@ public class ShowtimeseatController implements Initializable {
                 gridpane.setOnMouseClicked(event-> {
 
                     List<Seat> seat_list = new SeatDAO().list(showtime.getShowtime_id());
-                    System.out.println(seat_list.size());
+
 
                     gridPaneFSeat.getChildren().clear();
                     gridPaneFSeat.setGridLinesVisible(true);
@@ -114,7 +123,7 @@ public class ShowtimeseatController implements Initializable {
                                 button.setId(curent_seat.getSeat_id()+"");//setId for each Btn = each seat Id
 
                                 if(curent_seat.getAvailability_status() == 0) {
-                                    button.setStyle("-fx-background-color:  #D73F0F;");
+                                    button.setStyle("-fx-background-color:  #ff0000;");
                                     button.setDisable(true);
                                 }
 
@@ -170,13 +179,12 @@ public class ShowtimeseatController implements Initializable {
                                 gridPaneFSeat.setColumnIndex(button, col);
                                 gridPaneFSeat.getChildren().add(button);
 
-                                System.out.println(button.getId());
                                 count++;
                             }
 
                         }
 
-                        System.out.println(count);
+
                     }
                 });
                 gridpane.setStyle("-fx-border-color: black; " +
@@ -185,7 +193,6 @@ public class ShowtimeseatController implements Initializable {
                 content.getChildren().add(gridpane);
 
             }
-            System.out.println(showtimeList.size());
             scrollPane.setContent(content);
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,22 +201,24 @@ public class ShowtimeseatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        bookedReservationPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     }
 
     public GridPane createShowTimeGridPane(ShowTime showtime) {
         GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
+//        gridPane.setHgap(0);
+//        gridPane.setVgap(10);
 
         // Create ColumnConstraints and RowConstraints to distribute space evenly
         ColumnConstraints colConstraints = new ColumnConstraints();
-        colConstraints.setPercentWidth(50);
+        colConstraints.setPrefWidth(150);
         gridPane.getColumnConstraints().addAll(colConstraints, colConstraints);
 
         RowConstraints rowConstraints = new RowConstraints();
         rowConstraints.setPercentHeight(50);
         gridPane.getRowConstraints().addAll(rowConstraints, rowConstraints);
+
+
 
         for (int row = 0; row < 2; row++) {
             for (int col = 0; col < 2; col++) {
@@ -234,6 +243,9 @@ public class ShowtimeseatController implements Initializable {
 
             }
         }
+        gridPane.setStyle("-fx-border-color: black; " +
+                "-fx-border-width: 0px 0px 2px 0px; " +
+                "-fx-padding: 10px 0;"); // 10px top and bottom padding
         return gridPane;
     }
     public GridPane createReGridPane(BookingReservation re) {
@@ -241,7 +253,6 @@ public class ShowtimeseatController implements Initializable {
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
-        // Create ColumnConstraints and RowConstraints to distribute space evenly
         ColumnConstraints colConstraints = new ColumnConstraints();
         colConstraints.setPercentWidth(50);
         gridPane.getColumnConstraints().addAll(colConstraints, colConstraints);
@@ -270,6 +281,10 @@ public class ShowtimeseatController implements Initializable {
                 gridPane.getChildren().add(label);
             }
         }
+
+        gridPane.setStyle("-fx-border-color: black; " +
+                "-fx-border-width: 0px 0px 2px 0px; " +
+                "-fx-padding: 10px 0;"); // 10px top and bottom padding
         return gridPane;
     }
     public void setLightMode(ActionEvent actionEvent) {
@@ -279,24 +294,36 @@ public class ShowtimeseatController implements Initializable {
     }
 
     public void backToMovieList(ActionEvent actionEvent) {
-        try{
+        try {
 //                System.out.println("in the button");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../../fxml/moviecinema.fxml"));
             Parent root = loader.load();
 
-            Stage currentStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            Stage currentStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
             currentStage.setTitle("Movies Cinema");
             currentStage.setScene(new Scene(root, 1600, 900));
 
 //                System.out.println("here btn Clicked");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void gotoPayment(ActionEvent actionEvent) {
+    public void gotoPayment (ActionEvent actionEvent) {
+        try{
+            new SeatDAO().update();
+            new BookingReservationDAO().delete();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../../fxml/bookingSucess/bookingSucess.fxml"));
+            Parent root = loader.load();
+            Stage currentStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            currentStage.setTitle("Payment & Invoice");
+            currentStage.setScene(new Scene(root, 1600, 900));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void removeBookingAndPane(Seat seat, List<GridPane> list) {
@@ -325,8 +352,8 @@ public class ShowtimeseatController implements Initializable {
                 movie.getTittle(),
                 seat.getSeat_id(),
                 seat.getSeat_name(),
-                adultRadio.isSelected()?adultRadio.getText():childRadio.getText(),
-                adultRadio.isSelected()?ADULT_PRICE:CHILD_PRICE,
+                adultRadio.isSelected() ? adultRadio.getText() : childRadio.getText(),
+                adultRadio.isSelected() ? ADULT_PRICE : CHILD_PRICE,
                 showtime.getTheater_id(),
                 showtime.getShowtime_id(),
                 LocalDate.now()
@@ -340,15 +367,15 @@ public class ShowtimeseatController implements Initializable {
                 "-fx-padding: 10px 0;"); // 10px top and bottom padding
 
         int isExist = 0;
-        for(GridPane item: list) {
-            if(item.getId().equals(grid_pane.getId())) {
+        for (GridPane item : list) {
+            if (item.getId().equals(grid_pane.getId())) {
                 isExist = 1;
                 break;
             }
         }
-        if(isExist == 0) list.add(grid_pane);
+        if (isExist == 0) list.add(grid_pane);
 
-        VBox booking_content= new VBox();
+        VBox booking_content = new VBox();
         booking_content.getChildren().addAll(list);
         bookedReservationPane.setContent(booking_content);
     }

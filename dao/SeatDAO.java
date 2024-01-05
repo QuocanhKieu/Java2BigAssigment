@@ -106,6 +106,26 @@ public class SeatDAO implements DAOInterface<Seat>{
         return false; // Update failed
     }
 
+    public boolean update() {
+        String sql = "UPDATE seats SET availability_status = 0 WHERE availability_status = 2;";
+        try {
+            Connector conn = Connector.getInstance();
+            PreparedStatement ps = conn.getConn().prepareStatement(sql);
+
+
+
+            int rowsUpdated = ps.executeUpdate();
+
+            // Check if any rows were affected by the update
+            if (rowsUpdated > 0) {
+                return true; // Update successful
+            }
+        } catch (Exception e) {
+            // Handle exceptions here
+            e.printStackTrace(); // Print the exception for debugging
+        }
+        return false; // Update failed
+    }
 
     @Override
     public boolean delete(int id) {

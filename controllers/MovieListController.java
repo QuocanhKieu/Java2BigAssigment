@@ -61,7 +61,8 @@ public class MovieListController implements Initializable {
         moviePane.setAlignment(Pos.CENTER); // Set alignment to center content within the cell
         // Create and set up the ImageView for movie cover
         ImageView imageView = new ImageView();
-        imageView.setFitWidth(130); // Adjust the width of the image as needed
+        imageView.setFitWidth(170); // Adjust the width of the image as needed
+        imageView.setPreserveRatio(false);
         imageView.setFitHeight(200); // Adjust the height of the image as needed
         try {
             // Load the movie image (replace "/path/to/defaultImage.jpg" with a default image path)
@@ -81,6 +82,9 @@ public class MovieListController implements Initializable {
 
         moviePane.getChildren().addAll(imageView, title, movie.getMovieSelectBtn());
 
+        moviePane.setStyle("-fx-border-color: black; " +
+                "-fx-border-width: 2px; " +
+                "-fx-border-radius: 10px;");
         return moviePane;
     }
 

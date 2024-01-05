@@ -82,6 +82,23 @@ public class BookingReservationDAO implements DAOInterface<BookingReservation>{
         return false; // Deletion unsuccessful
     }
 
+    public boolean delete() {
+        try {
+            String sql = "DELETE FROM booking_reservation_tb";
+            Connector conn = Connector.getInstance();
+            PreparedStatement pstm = conn.getConn().prepareStatement(sql);
+            int rowsAffected = pstm.executeUpdate();
+
+            // Check if any rows were affected
+            if (rowsAffected > 0) {
+                return true; // Deletion successful
+            }
+        } catch (Exception e) {
+            // Handle exceptions here if needed
+            e.printStackTrace();
+        }
+        return false; // Deletion unsuccessful
+    }
 
     @Override
     public BookingReservation findOne(int id) {
