@@ -13,17 +13,17 @@
 
 <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moviebookingapp.controllers.MovieListController">
    <children>
-      <Text layoutX="729.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Now Playing">
+      <Text layoutX="702.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Now Playing">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="System Bold" size="33.0" />
          </font>
       </Text>
-      <GridPane fx:id="moviesGrid" hgap="25.0" layoutX="138.0" layoutY="56.0" prefHeight="809.0" prefWidth="1325.0" vgap="30.0">
+      <GridPane fx:id="moviesGrid" hgap="25.0" layoutX="72.0" layoutY="68.0" prefHeight="810.0" prefWidth="1265.0" vgap="30.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="322.0" minWidth="10.0" prefWidth="322.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -31,5 +31,20 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
+      <Button layoutX="1411.0" layoutY="103.0" mnemonicParsing="false" text="LogOut" onAction="#logout">
+         <font>
+            <Font name="System Bold Italic" size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="1411.0" layoutY="44.0" prefHeight="48.0" prefWidth="60.0" text="Staff :" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Text fx:id="staffName" layoutX="1471.0" layoutY="76.0" strokeType="OUTSIDE" style="-fx-stroke-width: 5px;" wrappingWidth="105.5673828125">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

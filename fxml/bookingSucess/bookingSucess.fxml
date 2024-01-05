@@ -34,11 +34,11 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ToggleButton>
-            <Button fx:id="logOutBtn" layoutX="1358.0" layoutY="12.0" mnemonicParsing="false" text="LogOut">
-               <font>
-                  <Font name="System Bold Italic" size="20.0" />
-               </font>
-            </Button>
+<!--            <Button fx:id="logOutBtn" layoutX="1358.0" layoutY="12.0" mnemonicParsing="false" text="LogOut">-->
+<!--               <font>-->
+<!--                  <Font name="System Bold Italic" size="20.0" />-->
+<!--               </font>-->
+<!--            </Button>-->
             <Label layoutX="628.0" layoutY="343.0" text="Booking Successfuly !">
                <font>
                   <Font name="System Bold Italic" size="33.0" />

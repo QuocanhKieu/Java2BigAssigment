@@ -133,7 +133,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ToggleButton>
-            <Button fx:id="logOutBtn" layoutX="1358.0" layoutY="12.0" mnemonicParsing="false" text="LogOut">
+            <Button fx:id="logOutBtn" layoutX="1358.0" layoutY="12.0" mnemonicParsing="false" onAction="#logout" text="LogOut">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font>
@@ -145,7 +145,7 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Text fx:id="staffName" layoutX="66.0" layoutY="39.0" stroke="#424242" strokeType="OUTSIDE" style="-fx-stroke-width: 5px;" wrappingWidth="184.5673828125">
+                  <Text fx:id="staffName" layoutX="66.0" layoutY="39.0" strokeType="OUTSIDE" style="-fx-stroke-width: 5px;" wrappingWidth="184.5673828125">
                      <font>
                         <Font size="20.0" />
                      </font>

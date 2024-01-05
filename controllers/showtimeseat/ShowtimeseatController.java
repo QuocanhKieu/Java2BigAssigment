@@ -12,6 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import moviebookingapp.controllers.LoginFormController;
+import moviebookingapp.controllers.MovieListController;
 import moviebookingapp.dao.BookingReservationDAO;
 import moviebookingapp.dao.InputStreamDAO;
 import moviebookingapp.dao.SeatDAO;
@@ -55,12 +57,6 @@ public class ShowtimeseatController implements Initializable {
     public ScrollPane bookedReservationPane;
     private Movie movie;
     private Stage currentStage;
-
-    private Map map;
-
-//    HashSet<BookedReservation> bookedReservationList = new HashSet<>(); // chung cho tất cả showtime tìm đc
-//    List<GridPane> reservationGridPaneList = new ArrayList<>(); // chung cho tất cả showtime tìm đc
-// ko cho đc ra ngoài này
 
     public void setMovieInfo(Movie choosedMovie, Stage currentStage ) {
         
@@ -198,10 +194,10 @@ public class ShowtimeseatController implements Initializable {
             e.printStackTrace();
         }
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         bookedReservationPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        staffName.setText(LoginFormController.activeUser.getUsername());
     }
 
     public GridPane createShowTimeGridPane(ShowTime showtime) {
@@ -289,22 +285,17 @@ public class ShowtimeseatController implements Initializable {
     }
     public void setLightMode(ActionEvent actionEvent) {
     }
-
     public void setDarkMode(ActionEvent actionEvent) {
     }
-
     public void backToMovieList(ActionEvent actionEvent) {
         try {
-//                System.out.println("in the button");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../../fxml/moviecinema.fxml"));
             Parent root = loader.load();
-
-            Stage currentStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-
             currentStage.setTitle("Movies Cinema");
             currentStage.setScene(new Scene(root, 1600, 900));
-
-//                System.out.println("here btn Clicked");
+            MovieListController movieListController = loader.getController();
+            movieListController.setStage(currentStage);
+            currentStage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -380,4 +371,36 @@ public class ShowtimeseatController implements Initializable {
         bookedReservationPane.setContent(booking_content);
     }
 
+    public void logout(ActionEvent actionEvent) {
+        try {
+            // Create a confirmation dialog
+            Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationDialog.setTitle("Confirmation Dialog");
+            confirmationDialog.setHeaderText("Are you sure you want to logout?");
+
+            // Show the confirmation dialog and wait for user response
+            confirmationDialog.showAndWait().ifPresent(response -> {
+                try{
+                    if (response == ButtonType.OK) {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../fxml/loginform.fxml"));
+                        Parent root = loader.load();
+                        currentStage.setTitle("Movies Cinema");
+                        currentStage.setScene(new Scene(root, 1600, 900));
+                        LoginFormController loginFormController = loader.getController();
+                        loginFormController.setStage(currentStage);
+                        currentStage.show();
+
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        }
 }

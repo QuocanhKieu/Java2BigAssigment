@@ -33,4 +33,6 @@ public class BookingSuccessController {
 
     public void setLightMode(ActionEvent actionEvent) {
     }
+
+
 }
